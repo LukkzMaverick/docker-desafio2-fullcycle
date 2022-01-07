@@ -28,7 +28,7 @@ services:
     networks:
       - node_network
     ports:
-     - 3306:80
+     - 3306:3306
 
   nginx:
     build:
