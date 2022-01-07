@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+
+  node:
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    container_name: node
+    networks:
+      - node_network
+    volumes:
+      - ./node:/usr/src/app
+    tty: true
+  db:
+    build:
+      context: ./mysql-image
+      dockerfile: Dockerfile
+    command: --innodb-use-native-aio=0
+    container_name: db
+    restart: always
+    tty: true
+    volumes: 
+      - ./mysql:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=nodedb
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - node_network
+    ports:
+     - 3306:80
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    image: lukkzmaverick/fullcycle-desafio2-nginx
+    container_name: nginx 
+    networks: 
+     - node_network
+    ports:
+     - 8080:80
+
+networks:
+  node_network:
+    driver: bridge
