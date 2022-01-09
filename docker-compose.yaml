@@ -6,17 +6,20 @@ services:
     build:
       context: ./node
       dockerfile: Dockerfile
+    command: npm run runDocker
     container_name: node
     networks:
       - node_network
     volumes:
       - ./node:/usr/src/app
     tty: true
+    depends_on:
+      - db
   db:
     build:
       context: ./mysql-image
       dockerfile: Dockerfile
-    command: --innodb-use-native-aio=0
+    command: --default-authentication-plugin=mysql_native_password
     container_name: db
     restart: always
     tty: true
