@@ -44,6 +44,8 @@ services:
      - node_network
     ports:
      - 8080:80
+    depends_on:
+      - node
 
 networks:
   node_network:
